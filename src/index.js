@@ -6,8 +6,8 @@ const app = express()
 
 
 
-app.use('/token', jwtRoutes)
-
+app.use(express.json()) // Middleware
+app.use('/auth', jwtRoutes)
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);
