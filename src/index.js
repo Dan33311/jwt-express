@@ -1,33 +1,27 @@
-require('dotenv').config()
-const express = require('express')
-const authRoutes = require('./routes/auth')
-const userRoutes = require('./routes/user')
-const port = process.env.PORT || 3000
-const app = express()
+require('dotenv').config();
+const express = require('express');
+const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
 
 
-app.use(express.json()) // Middleware
-app.use("/user", async (req, res, next) => {
-  if (req.headers.authorization) {
-    const token = req.headers.authorization.split(" ")[1];
 
-    try {
-      const { id } = await jwtVerifyAsync(token);
-      req.id = id;
-      return next();
-    } catch (err) {
-      console.error(err);
-      return res.status(500).send();
-    }
-  }
-  return res.status(401).send();
-});
+const bootstrap = () => {
+  const port = process.env.PORT || 3000;
+  const app = express();
 
-app.use("/auth", authRoutes);
-app.use("/user", userRoutes);
+  // Middlewares
+  app.use(express.json());
 
-app.listen(port, () => {
-  console.log(`Example app listening at http://localhost:${port}`);
-})
+  // Routes
+  app.use("/auth", authRoutes);
+  app.use("/user", userRoutes);
+  
+  // Startup
+  app.listen(port, () => {
+    console.log(`Server listening at http://localhost:${port}`);
+  });
+};
+
+bootstrap();
 
 
