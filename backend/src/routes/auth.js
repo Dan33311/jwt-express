@@ -1,5 +1,6 @@
 const { Router } = require("express");
 const { jwtSign, jwtVerify } = require('../lib/jwt');
+const { findByEmail } = require("../repository/user.repository");
 const userDB = require('../constants/users');
 const router = Router();
 
@@ -11,10 +12,10 @@ router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
   // Este find sería el equivalente a buscar al usuario en la BD
-  const userFound = userDB.find(user => user.email === email);
+  const userFound = userDB.findByEmail(email);
 
   if (!userFound || userFound.password !== password)
-  return res.status(401).send();
+    return res.status(401).send();
 
   try {
     const token = await jwtSign(

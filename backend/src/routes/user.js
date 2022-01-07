@@ -1,6 +1,6 @@
 const { Router: expressRouter } = require("express");
-const usersDB = require("../constants/users");
 const authMiddleware = require('../middlewares/auth-middleware');
+const { findById } = require("../repository/user.repository");
 
 const router = expressRouter();
 
@@ -12,7 +12,7 @@ router.use(authMiddleware);
 router.get("/profile", async (req, res) => {
   // const { id } = req;
 
-  const userFound = usersDB.find((user) => user.id === id);
+  const userFound = findById(id);
 
   if (!userFound) return res.status(401).send();
 
